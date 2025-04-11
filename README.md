@@ -4,8 +4,39 @@ sometimes, due to unfortunate layers of nesting, joining different systems, or w
 
 it'd be nice to be able to `serde` that data without doing the intermediate string handling.
 
-**this is experimental**
+## features
 
+features map directly to supported formats right now, and correspond to their dependency crates:
+
+`serde_json` (on by default), `serde_yaml`, & `toml`
+
+## usage
+
+annotate your field with one of the deserializers, such as `deser_stringified_json`, then parse it as normal:
+
+```rust
+#[derive(Deserialize)]
+struct Example {
+    #[serde(deserialize_with = "deser_stringified_json")]
+    data: Metadata,
+}
+
+#[derive(Deserialize)]
+struct Metadata {
+    key: i32,
+    enabled: bool,
+}
+
+let json_str = r#"{"data": "{\"key\": 1, \"enabled\": false}"}"#;
+
+let struct_parsed: Example<Metadata> = serde_json::from_str(json_str).unwrap();
+assert_eq!(struct_parsed.data.key, 1);
+assert_eq!(struct_parsed.data.enabled, false);
+```
+
+## custom formats
+
+all formats are implemented as a simple wrapper around the generic type - just supply a function that parses `T` from `&str` for your format, copying the existing ones.
 
 ## special thanks
 
