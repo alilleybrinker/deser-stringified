@@ -2,6 +2,9 @@
 name = "deser-stringified"
 version = "0.1.0"
 edition = "2024"
+authors = ["Stella Cannefax"]
+description = "Conveniently deserialize stringified structured data in fields"
+repository = "https://github.com/stella3d/deser-stringified"
 
 [dependencies]
 serde = { version = "1.0.219", features = ["derive", "std", "alloc"] }
